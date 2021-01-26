@@ -1,9 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.ReminderApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
         <!-- Customize your theme here. -->
-        <item name="android:fitsSystemWindows">true</item>
-        <item name="colorControlActivated">@color/login_focused_color</item>
+        <item name="colorPrimaryDark">@color/statusBarColor</item>
+    </style>
+
+    <!-- Bottom navigation bar theme. -->
+    <style name="BottomNavigation">
+        <item name="android:background">@color/statusBarColor</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
+        <item name="itemRippleColor">@color/material_on_surface_stroke</item>
     </style>
 </resources>

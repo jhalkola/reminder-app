@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_color"
+    android:background="@color/colorBackground"
     android:fitsSystemWindows="true"
     android:theme="@style/Theme.ReminderApp"
     android:visibility="visible"
@@ -12,7 +12,7 @@
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonLogin"
         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -48,7 +48,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName" />
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -63,7 +62,7 @@
         app:boxStrokeColor="@color/login_focused_color"
         app:hintTextColor="@color/login_focused_color"
         app:boxStrokeWidth="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:hint="@string/login_password">
@@ -84,6 +83,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_calendar_today_white" />
+        app:srcCompat="@drawable/ic_calendar_today_white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
