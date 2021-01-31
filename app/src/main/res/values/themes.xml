@@ -2,14 +2,6 @@
     <!-- Base application theme. -->
     <style name="Theme.ReminderApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimaryDark">@color/statusBarColor</item>
-    </style>
-
-    <!-- Bottom navigation bar theme. -->
-    <style name="BottomNavigation">
-        <item name="android:background">@color/statusBarColor</item>
-        <item name="itemIconTint">@color/white</item>
-        <item name="itemTextColor">@color/white</item>
-        <item name="itemRippleColor">@color/material_on_surface_stroke</item>
+        <item name="colorPrimaryDark">@color/app_background</item>
     </style>
 </resources>

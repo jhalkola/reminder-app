@@ -13,13 +13,18 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.reminderapp.databinding.ActivityLoginBinding
+import com.example.reminderapp.databinding.ActivityMainBinding
 
 class LoginActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val loginButton = findViewById<Button>(R.id.buttonLogin)
+        val loginButton = binding.buttonLogin
         loginButton.setOnClickListener {
             val mainIntent = Intent(this, MainActivity::class.java)
             startActivity(mainIntent)

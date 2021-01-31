@@ -7,8 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="statusBarColor">#FF1B1B1B</color>
-    <color name="colorBackground">#323232</color>
-    <color name="colorBackgroundSecondary"></color>
-    <color name="login_focused_color">#E3E3E3</color>
+    <color name="navbar_background">@color/black</color>
+    <color name="navbar_unfocused">#8c8c8c</color>
+    <color name="app_background">#262626</color>
+    <color name="loginbox_focused">#E3E3E3</color>
 </resources>
