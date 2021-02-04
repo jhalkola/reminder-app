@@ -43,7 +43,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun checkLoginStatus() {
-        val loginStatus = (activity as Context).applicationContext.getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE).getInt("loginKey", 0)
+        val loginStatus = (activity as Context).applicationContext.getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE).getInt(getString(R.string.login_key), 0)
         if (loginStatus == 1) {
             val loginIntent = Intent(activity as Context, MainActivity::class.java)
             startActivity(loginIntent)
@@ -55,11 +55,12 @@ class LoginFragment : Fragment() {
         val password = binding.textPassword.text.toString()
 
         val sharedPref = (activity as Context).applicationContext.getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE)
-        val savedUsername = sharedPref.getString(username.plus("UsernameKey"), null)
-        val savedPassword = sharedPref.getString(password.plus("PasswordKey"), null)
+        val savedUsername = sharedPref.getString(username.plus(R.string.user_key), null)
+        val savedPassword = sharedPref.getString(username.plus(R.string.pass_key), null)
 
         if (savedUsername == username && savedPassword == password) {
-            sharedPref.edit().putInt("loginKey", 1).apply()
+            sharedPref.edit().putInt(getString(R.string.login_key), 1).apply()
+            sharedPref.edit().putString(getString(R.string.current_user_key), username).apply()
         }
         else {
             val toast = Toast.makeText(activity as Context, "Login credentials were incorrect", Toast.LENGTH_SHORT)

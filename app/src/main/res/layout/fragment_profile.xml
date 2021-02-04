@@ -9,10 +9,10 @@
     tools:context=".fragments.ProfileFragment">
 
     <ImageView
-        android:id="@+id/imageProfilePicture"
+        android:id="@+id/imageProfilePictureProfile"
         android:layout_width="170dp"
         android:layout_height="170dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="75dp"
         android:adjustViewBounds="true"
         android:background="@drawable/circle_transparent"
         android:scaleType="centerCrop"
@@ -35,19 +35,122 @@
         android:focusable="true"
         android:src="@drawable/ic_add_photo"
         app:backgroundTint="@color/button"
-        app:layout_constraintBottom_toBottomOf="@+id/imageProfilePicture"
-        app:layout_constraintEnd_toEndOf="@+id/imageProfilePicture"
+        app:layout_constraintBottom_toBottomOf="@+id/imageProfilePictureProfile"
+        app:layout_constraintEnd_toEndOf="@+id/imageProfilePictureProfile"
         app:tint="@color/white"
         tools:ignore="ContentDescription" />
 
-    <ImageButton
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldUsernameProfile"
+        style="@style/BoxStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:hint="@string/username"
+        app:hintTextAppearance="@style/HintStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageUsername"
+        app:layout_constraintTop_toBottomOf="@+id/imageProfilePictureProfile">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textUsernameProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldPasswordProfile"
+        style="@style/BoxStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_exit_app"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription"/>
+        android:hint="@string/password"
+        app:hintTextAppearance="@style/HintStyle"
+        app:layout_constraintEnd_toEndOf="@+id/textFieldUsernameProfile"
+        app:layout_constraintStart_toStartOf="@+id/textFieldUsernameProfile"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldUsernameProfile"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/white">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textPasswordProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldEmailProfile"
+        style="@style/BoxStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/email"
+        app:hintTextAppearance="@style/HintStyle"
+        app:layout_constraintEnd_toEndOf="@+id/textFieldPasswordProfile"
+        app:layout_constraintStart_toStartOf="@+id/textFieldPasswordProfile"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldPasswordProfile">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textEmailProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/imageUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="6dp"
+        android:src="@drawable/ic_person"
+        app:layout_constraintBottom_toBottomOf="@+id/textFieldUsernameProfile"
+        app:layout_constraintEnd_toStartOf="@+id/textFieldUsernameProfile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textFieldUsernameProfile"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/imagePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        android:src="@drawable/ic_lock"
+        app:layout_constraintBottom_toBottomOf="@+id/textFieldPasswordProfile"
+        app:layout_constraintEnd_toStartOf="@+id/textFieldPasswordProfile"
+        app:layout_constraintStart_toStartOf="@+id/imageUsername"
+        app:layout_constraintTop_toTopOf="@+id/textFieldPasswordProfile"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/imageEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        android:src="@drawable/ic_email"
+        app:layout_constraintBottom_toBottomOf="@+id/textFieldEmailProfile"
+        app:layout_constraintEnd_toStartOf="@+id/textFieldEmailProfile"
+        app:layout_constraintStart_toStartOf="@+id/imageUsername"
+        app:layout_constraintTop_toTopOf="@+id/textFieldEmailProfile"
+        tools:ignore="ContentDescription" />
+
+    <Button
+        android:id="@+id/buttonLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:drawableEnd="@drawable/ic_exit_app"
+        android:text="@string/logout_button"
+        android:textColor="@color/white"
+        app:cornerRadius="6dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

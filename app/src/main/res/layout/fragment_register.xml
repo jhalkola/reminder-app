@@ -10,35 +10,43 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textFieldUsernameRegister"
-        style="@style/RegisterBox"
+        style="@style/BoxStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
         android:ems="10"
-        android:hint="@string/login_username"
+        android:hint="@string/username"
+        app:hintTextAppearance="@style/HintStyle"
+        app:counterEnabled="true"
+        app:counterMaxLength="12"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pfpImage">
+        app:layout_constraintStart_toEndOf="@+id/imageUsername"
+        app:layout_constraintTop_toBottomOf="@+id/imageProfilePictureRegister">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textUsernameRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:textColor="@color/black"
-            android:textColorLink="@color/black" />
+            android:inputType="text"
+            android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textFieldPasswordRegister"
-        style="@style/RegisterBox"
+        style="@style/BoxStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="@string/login_password"
+        android:hint="@string/password"
+        app:hintTextAppearance="@style/HintStyle"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
+        app:errorEnabled="true"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/textFieldUsernameRegister"
         app:layout_constraintStart_toStartOf="@+id/textFieldUsernameRegister"
         app:layout_constraintTop_toBottomOf="@+id/textFieldUsernameRegister">
@@ -48,19 +56,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:textColor="@color/black" />
+            android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textFieldEmailRegister"
-        style="@style/RegisterBox"
+        style="@style/BoxStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="@string/email"
-        app:layout_constraintEnd_toEndOf="@+id/textFieldPasswordRegister"
-        app:layout_constraintStart_toStartOf="@+id/textFieldPasswordRegister"
+        app:hintTextAppearance="@style/HintStyle"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="@+id/textFieldUsernameRegister"
+        app:layout_constraintStart_toStartOf="@+id/textFieldUsernameRegister"
         app:layout_constraintTop_toBottomOf="@+id/textFieldPasswordRegister">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -68,13 +78,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:textColor="@color/black" />
+            android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/buttonRegister"
         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="250dp"
@@ -87,10 +97,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textFieldEmailRegister" />
 
     <ImageView
-        android:id="@+id/pfpImage"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:layout_marginTop="100dp"
+        android:id="@+id/imageProfilePictureRegister"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="75dp"
         android:adjustViewBounds="true"
         android:background="@drawable/circle_transparent"
         android:scaleType="centerCrop"
@@ -111,10 +121,47 @@
         android:focusable="true"
         android:src="@drawable/ic_add_photo"
         app:backgroundTint="@color/button"
-        app:layout_constraintBottom_toBottomOf="@+id/pfpImage"
-        app:layout_constraintEnd_toEndOf="@+id/pfpImage"
+        app:layout_constraintBottom_toBottomOf="@+id/imageProfilePictureRegister"
+        app:layout_constraintEnd_toEndOf="@+id/imageProfilePictureRegister"
         app:tint="@color/white"
         tools:ignore="ContentDescription" />
 
+    <ImageView
+        android:id="@+id/imageUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="6dp"
+        android:src="@drawable/ic_person"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textFieldUsernameRegister"
+        app:layout_constraintBottom_toBottomOf="@+id/textFieldUsernameRegister"
+        app:layout_constraintTop_toTopOf="@+id/textFieldUsernameRegister"
+        tools:ignore="ContentDescription" />
 
+    <ImageView
+        android:id="@+id/imagePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="6dp"
+        android:src="@drawable/ic_lock"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageUsername"
+        app:layout_constraintBottom_toBottomOf="@+id/textFieldPasswordRegister"
+        app:layout_constraintTop_toTopOf="@+id/textFieldPasswordRegister"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/imageEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="6dp"
+        android:src="@drawable/ic_email"
+        app:layout_constraintEnd_toEndOf="@+id/imageUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/textFieldEmailRegister"
+        app:layout_constraintTop_toTopOf="@+id/textFieldEmailRegister"
+        tools:ignore="ContentDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>

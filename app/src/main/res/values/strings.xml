@@ -2,14 +2,20 @@
     <string name="app_name">ReminderApp</string>
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
-    <string name="login_username">Username</string>
-    <string name="login_password">Password</string>
+    <string name="logout_button">Logout</string>
+    <string name="logout_underlined"><u>Logout</u></string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="search">Search</string>
-    <string name="logout">Logout</string>
     <string name="profile">Profile</string>
     <string name="home">Home</string>
     <string name="not_registered">Not yet registered?</string>
     <string name="register_textbutton"><u>Create account</u></string>
     <string name="sharedPref">myPref</string>
+    <string name="user_key">UsernameKey</string>
+    <string name="pass_key">PasswordKey</string>
+    <string name="email_key">EmailKey</string>
+    <string name="login_key">LoginStatusKey</string>
+    <string name="current_user_key">CurrentlyUserKey</string>
 </resources>

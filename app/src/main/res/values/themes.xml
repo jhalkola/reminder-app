@@ -4,16 +4,22 @@
         <!-- Customize your theme here. -->
         <item name="android:statusBarColor">@color/app_background</item>
     </style>
-    <style name="RegisterBox">
-        <item name="android:textColorHint">@color/register_hint</item>
-        <item name="boxStrokeColor">@color/black</item>
-        <item name="hintTextColor">@color/black</item>
-        <item name="boxBackgroundColor">@color/white</item>
-    </style>
+
     <style name="LoginBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:textColorHint">@color/login_hint</item>
         <item name="boxStrokeColor">@color/white</item>
         <item name="hintTextColor">@color/white</item>
         <item name="boxStrokeWidth">2dp</item>
+    </style>
+
+    <style name="BoxStyle">
+        <item name="android:textColorHint">@color/light_grey</item>
+        <item name="boxStrokeColor">@color/box_focus</item>
+        <item name="hintTextColor">@color/box_focus</item>
+        <item name="boxBackgroundColor">@color/app_background</item>
+    </style>
+
+    <style name="HintStyle">
+        <item name="android:textSize">14sp</item>
     </style>
 </resources>

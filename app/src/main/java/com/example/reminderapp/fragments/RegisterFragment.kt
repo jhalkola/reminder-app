@@ -14,19 +14,31 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.FragmentRegisterBinding
+import com.google.android.material.textfield.TextInputLayout
 
 
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
     private val pickImage = 1
+    private lateinit var textInputUsername: TextInputLayout
+    private lateinit var textInputPassword: TextInputLayout
+    private lateinit var textInputEmail: TextInputLayout
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
-        binding.pfpImage.clipToOutline = true
+        binding.imageProfilePictureRegister.clipToOutline = true
+
+        sharedPref = (activity as Context).applicationContext.getSharedPreferences(
+                getString(R.string.sharedPref), Context.MODE_PRIVATE)
+
+        textInputUsername = binding.textFieldUsernameRegister
+        textInputPassword = binding.textFieldPasswordRegister
+        textInputEmail = binding.textFieldEmailRegister
         return binding.root
     }
 
@@ -43,40 +55,25 @@ class RegisterFragment : Fragment() {
     }
 
     private fun saveData(): Boolean {
-        val username = binding.textUsernameRegister.text.toString()
-        val password = binding.textPasswordRegister.text.toString()
-        val email = binding.textEmailRegister.text.toString()
-        if (username.isNotEmpty() && password.isNotEmpty() && email.isNotEmpty()) {
-            val sharedPref = (activity as Context).applicationContext.getSharedPreferences(
-                getString(R.string.sharedPref),
-                Context.MODE_PRIVATE
-            )
-            when {
-                sharedPref.contains(username.plus("UsernameKey")) -> {
-                    val toast = Toast.makeText(activity as Context, "Username already taken", Toast.LENGTH_SHORT)
-                    toast.show()
-                    return false
-                }
-                sharedPref.contains(email.plus("EmailKey")) -> {
-                    val toast = Toast.makeText(activity as Context, "Email already in use on another account", Toast.LENGTH_SHORT)
-                    toast.show()
-                    return false
-                }
-                else -> {
-                    val editor = sharedPref.edit()
-                    editor.apply {
-                        putString(username.plus("UsernameKey"), username)
-                        putString(password.plus("PasswordKey"), password)
-                        putString(email.plus("EmailKey"), email)
-                    }.apply()
-                    return true
-                }
-            }
-        }
-        else {
-            val toast = Toast.makeText(activity as Context, "Cannot register with empty fields!", Toast.LENGTH_SHORT)
-            toast.show()
+        val username = textInputUsername.editText?.text.toString()
+        val password = textInputPassword.editText?.text.toString()
+        val email = textInputEmail.editText?.text.toString()
+
+        if (!validateFields()) {
             return false
+        } else {
+            val editor = sharedPref.edit()
+            editor.apply {
+                putString(username.plus(R.string.user_key), username)
+                putString(username.plus(R.string.pass_key), password)
+                putString(username.plus(R.string.email_key), email)
+                putString(email.plus(R.string.email_key), email)
+            }.apply()
+
+            textInputUsername.error = ""
+            textInputPassword.error = ""
+            textInputEmail.error = ""
+            return true
         }
     }
 
@@ -84,7 +81,7 @@ class RegisterFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == pickImage && resultCode == Activity.RESULT_OK) {
             val imageURI = data?.data
-            binding.pfpImage.setImageURI(imageURI)
+            binding.imageProfilePictureRegister.setImageURI(imageURI)
         }
     }
 
@@ -92,6 +89,68 @@ class RegisterFragment : Fragment() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
         startActivityForResult(intent, pickImage)
+    }
+
+    private fun validateFields(): Boolean {
+        return !(!validateUsername() or !validatePassword() or !validateEmail())
+    }
+
+    private fun validateUsername(): Boolean {
+        val username = textInputUsername.editText?.text.toString()
+        return when {
+            username.isEmpty() -> {
+                textInputUsername.error = "Field can't be empty"
+                false
+            }
+            username.length > 12 -> {
+                textInputUsername.error = "Username has to be under 12 characters"
+                false
+            }
+            sharedPref.contains(username.plus(R.string.user_key)) -> {
+                textInputUsername.error = "Username already in use"
+                false
+            }
+            else -> {
+                textInputUsername.error = ""
+                true
+            }
+        }
+    }
+
+    private fun validatePassword(): Boolean {
+        val password = textInputPassword.editText?.text.toString()
+        return when {
+            password.isEmpty() -> {
+                textInputPassword.error = "Field can't be empty"
+                false
+            }
+            password.length > 20 -> {
+                textInputPassword.error = "Password has to be under 20 characters"
+                false
+            }
+            else -> {
+                textInputPassword.error = ""
+                true
+            }
+        }
+    }
+
+    private fun validateEmail(): Boolean {
+        val email = textInputEmail.editText?.text.toString()
+        return when {
+            email.isEmpty() -> {
+                textInputEmail.error = "Field can't be empty"
+                false
+            }
+            sharedPref.contains(email.plus(R.string.email_key)) -> {
+                textInputEmail.error = "Email already registered to another account"
+                false
+            }
+            else -> {
+                textInputEmail.error = ""
+                true
+            }
+        }
     }
 
     override fun onDestroyView() {

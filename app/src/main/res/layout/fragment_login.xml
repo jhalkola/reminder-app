@@ -70,7 +70,7 @@
         android:layout_marginEnd="70dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
-        android:hint="@string/login_username"
+        android:hint="@string/username"
         app:layout_constraintBottom_toTopOf="@+id/textFieldPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -79,6 +79,8 @@
             android:id="@+id/textUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_person"
+            android:drawablePadding="8dp"
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,7 +93,7 @@
         android:layout_marginEnd="70dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
-        android:hint="@string/login_password"
+        android:hint="@string/password"
         android:textColorHint="@color/login_hint"
         app:boxStrokeColor="@color/white"
         app:hintTextColor="@color/white"
@@ -104,6 +106,8 @@
             android:id="@+id/textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="8dp"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
