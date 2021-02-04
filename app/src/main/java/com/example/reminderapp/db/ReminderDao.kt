@@ -1,4 +1,4 @@
-package com.example.reminderapp.data
+package com.example.reminderapp.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -7,10 +7,10 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface UserDao {
+interface ReminderDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addUser(user: User)
+    suspend fun addReminder(reminder: Reminder)
 
     @Query("SELECT * FROM user_table ORDER BY id ASC")
-    fun readAllData(): LiveData<List<User>>
+    fun readAllData(): LiveData<List<Reminder>>
 }

@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayoutLogin"
+    android:id="@+id/loginLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background"
@@ -11,81 +11,18 @@
     android:focusable="true"
     android:theme="@style/Theme.ReminderApp"
     android:visibility="visible"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
-    <Button
-        android:id="@+id/buttonLogin"
-        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_login_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:backgroundTint="#A8A8A8"
-        android:text="@string/login_button"
-        android:textColor="@color/white"
-        app:cornerRadius="30dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textFieldUsername"
-        app:layout_constraintStart_toStartOf="@+id/textFieldPassword"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textFieldUsername"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:hint="@string/login_username"
-        app:boxStrokeColor="@color/loginbox_focused"
-        app:boxStrokeWidth="2dp"
-        app:hintTextColor="@color/loginbox_focused"
-        app:layout_constraintBottom_toTopOf="@+id/textFieldPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textUsername"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textFieldPassword"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:hint="@string/login_password"
-        app:boxStrokeColor="@color/loginbox_focused"
-        app:boxStrokeWidth="2dp"
-        app:hintTextColor="@color/loginbox_focused"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <ImageView
-        android:id="@+id/imageAppLogin"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/textFieldUsername"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_calendar_today_white"
-        tools:ignore="ContentDescription" />
+        app:navGraph="@navigation/nav_login_graph" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

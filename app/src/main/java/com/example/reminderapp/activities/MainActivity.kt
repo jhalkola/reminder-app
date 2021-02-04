@@ -1,13 +1,13 @@
-package com.example.reminderapp
+package com.example.reminderapp.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Window
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
