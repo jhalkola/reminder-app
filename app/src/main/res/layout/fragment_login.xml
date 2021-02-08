@@ -28,8 +28,8 @@
         android:textColor="@color/white"
         app:cornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textFieldUsername"
-        app:layout_constraintStart_toStartOf="@+id/textFieldPassword"
+        app:layout_constraintEnd_toEndOf="@+id/textFieldUsernameLogin"
+        app:layout_constraintStart_toStartOf="@+id/textFieldPasswordLogin"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -62,7 +62,7 @@
         app:layout_constraintStart_toEndOf="@+id/textRegister" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textFieldUsername"
+        android:id="@+id/textFieldUsernameLogin"
         style="@style/LoginBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
         android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="@string/username"
-        app:layout_constraintBottom_toTopOf="@+id/textFieldPassword"
+        app:layout_constraintBottom_toTopOf="@+id/textFieldPasswordLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -85,7 +85,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textFieldPassword"
+        android:id="@+id/textFieldPasswordLogin"
         style="@style/LoginBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/textFieldUsername"
+        app:layout_constraintBottom_toTopOf="@+id/textFieldUsernameLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

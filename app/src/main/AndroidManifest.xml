@@ -9,13 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ReminderApp">
+        <activity android:name=".activities.LoginActivity" >
+        </activity>
         <activity android:name=".activities.MainActivity"
                     android:windowSoftInputMode="adjustPan">
-        </activity>
-        <activity android:name=".activities.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

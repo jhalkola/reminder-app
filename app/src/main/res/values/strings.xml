@@ -4,6 +4,8 @@
     <string name="register_button">Register</string>
     <string name="logout_button">Logout</string>
     <string name="logout_underlined"><u>Logout</u></string>
+    <string name="edit_button">Edit Profile</string>
+    <string name="save_changes">Save Changes</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
@@ -13,9 +15,11 @@
     <string name="not_registered">Not yet registered?</string>
     <string name="register_textbutton"><u>Create account</u></string>
     <string name="sharedPref">myPref</string>
-    <string name="user_key">UsernameKey</string>
-    <string name="pass_key">PasswordKey</string>
-    <string name="email_key">EmailKey</string>
-    <string name="login_key">LoginStatusKey</string>
-    <string name="current_user_key">CurrentlyUserKey</string>
+    <string name="user_key">Username</string>
+    <string name="pass_key">Password</string>
+    <string name="email_key">Email</string>
+    <string name="login_key">LoginStatus</string>
+    <string name="current_user_key">CurrentUserKey</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

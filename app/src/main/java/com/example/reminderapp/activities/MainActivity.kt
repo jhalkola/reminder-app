@@ -1,10 +1,13 @@
 package com.example.reminderapp.activities
 
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -18,11 +21,18 @@ import com.example.reminderapp.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // get shared preferences
+        sharedPref = applicationContext.getSharedPreferences(
+            getString(R.string.sharedPref), Context.MODE_PRIVATE)
+
+        checkLoginStatus()
 
         // set status bar color to black
         val window = this.window
@@ -34,6 +44,19 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         val bottomNavView = binding.bottomNavigationView
         NavigationUI.setupWithNavController(bottomNavView, navController)
+    }
+
+    private fun checkLoginStatus() {
+        val loginStatus = sharedPref.getInt(getString(R.string.login_key), 0)
+        if (loginStatus == 0) {
+            val loginIntent = Intent(applicationContext, LoginActivity::class.java)
+            startActivity(loginIntent)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkLoginStatus()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {

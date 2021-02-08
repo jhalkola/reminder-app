@@ -34,7 +34,6 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_add_photo"
-        android:visibility="invisible"
         app:backgroundTint="@color/button"
         app:layout_constraintBottom_toBottomOf="@+id/imageProfilePictureProfile"
         app:layout_constraintEnd_toEndOf="@+id/imageProfilePictureProfile"
@@ -50,6 +49,9 @@
         android:layout_marginEnd="20dp"
         android:hint="@string/username"
         app:hintTextAppearance="@style/HintStyle"
+        app:counterEnabled="true"
+        app:counterMaxLength="12"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageUsername"
         app:layout_constraintTop_toBottomOf="@+id/imageProfilePictureProfile">
@@ -59,8 +61,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:focusable="false"
-            android:cursorVisible="false"
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,6 +72,9 @@
         android:layout_marginTop="16dp"
         android:hint="@string/password"
         app:hintTextAppearance="@style/HintStyle"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="@+id/textFieldUsernameProfile"
         app:layout_constraintStart_toStartOf="@+id/textFieldUsernameProfile"
         app:layout_constraintTop_toBottomOf="@+id/textFieldUsernameProfile"
@@ -83,8 +86,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:focusable="false"
-            android:cursorVisible="false"
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,8 +96,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="@string/email"
-
         app:hintTextAppearance="@style/HintStyle"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="@+id/textFieldPasswordProfile"
         app:layout_constraintStart_toStartOf="@+id/textFieldPasswordProfile"
         app:layout_constraintTop_toBottomOf="@+id/textFieldPasswordProfile">
@@ -106,8 +107,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:focusable="false"
-            android:cursorVisible="false"
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -149,31 +148,17 @@
         tools:ignore="ContentDescription" />
 
     <Button
-        android:id="@+id/buttonLogout"
-        android:layout_width="wrap_content"
+        android:id="@+id/buttonSaveChanges"
+        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:backgroundTint="@android:color/holo_red_light"
-        android:drawableEnd="@drawable/ic_exit_app"
-        android:text="@string/logout_button"
+        android:backgroundTint="@color/button"
+        android:text="@string/save_changes"
         android:textColor="@color/white"
-        app:cornerRadius="6dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:id="@+id/buttonEditProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:textColor="@color/light_grey"
-        android:text="@string/edit_button"
-        app:cornerRadius="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/light_grey" />
+        app:cornerRadius="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/textFieldEmailProfile"
+        app:layout_constraintStart_toStartOf="@+id/textFieldEmailProfile"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldEmailProfile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
