@@ -18,6 +18,9 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    /**
+     * unfocus EditText box when clicked outside of it
+     */
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         if (ev.action == MotionEvent.ACTION_DOWN) {
             val view = currentFocus

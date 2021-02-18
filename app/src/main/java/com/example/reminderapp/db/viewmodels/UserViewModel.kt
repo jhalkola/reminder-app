@@ -12,14 +12,14 @@ import kotlinx.coroutines.launch
 
 class UserViewModel(application: Application): AndroidViewModel(application) {
     val readAllUsers: LiveData<List<User>>
-    val readAllEmails: LiveData<List<String>>
+    val readEmails: LiveData<List<String>>
     private val repository: UserRepository
 
     init {
         val userDao = AppDatabase.getDatabase(application).userDao()
         repository = UserRepository(userDao)
         readAllUsers = repository.readAllUsers
-        readAllEmails = repository.readAllEmails
+        readEmails = repository.readEmails
     }
 
     fun addUser(user: User) {
@@ -36,5 +36,9 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
 
     fun readUser(name: String): LiveData<User> {
         return repository.readUser(name)
+    }
+
+    fun readUserId(name: String): LiveData<Int> {
+        return repository.readUserId(name)
     }
 }

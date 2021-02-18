@@ -3,9 +3,12 @@ package com.example.reminderapp.fragments
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
+import com.example.reminderapp.R
+import com.example.reminderapp.adaptors.ReminderAdaptor
 import com.example.reminderapp.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -18,14 +21,27 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        setHasOptionsMenu(true)
+        val supActionBar = (activity as AppCompatActivity).supportActionBar!!
+        supActionBar.setDisplayHomeAsUpEnabled(false)
+        supActionBar.title = "Reminders"
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         listView = binding.listViewMain
-        val list = arrayListOf("item 1", "item 2", "item 3", "item 4", "item 5", "item 6")
-        val adapter = ArrayAdapter(activity as Context, android.R.layout.simple_list_item_1, list)
-        listView.adapter = adapter
+        listView.adapter = ReminderAdaptor(activity as Context)
+
+        binding.buttonAddReminder.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_addReminderFragment)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_toolbar_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onDestroyView() {

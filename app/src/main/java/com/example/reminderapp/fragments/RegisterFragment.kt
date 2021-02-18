@@ -31,6 +31,7 @@ class RegisterFragment : Fragment() {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var mUserViewModel: UserViewModel
     private lateinit var imageUri: Uri
+    private lateinit var emailList: List<String>
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -46,11 +47,17 @@ class RegisterFragment : Fragment() {
         textInputPassword = binding.textFieldPasswordRegister
         textInputEmail = binding.textFieldEmailRegister
 
+        mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        // get all emails from db. Async task did not have enough time to complete in emailValidation
+        mUserViewModel.readEmails.observe(viewLifecycleOwner, { emails ->
+            emailList = emails
+        })
+
         // set default image to empty in case no profile picture is chosen
         imageUri = Uri.parse("")
 
         sharedPref.edit().putInt(getString(R.string.login_key), 0).apply()
-        mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         return binding.root
     }
 
@@ -168,17 +175,12 @@ class RegisterFragment : Fragment() {
 
     private fun validateEmail(): Boolean {
         val email = textInputEmail.editText?.text.toString()
-        val listOfEmails: MutableList<String> = mutableListOf()
-        mUserViewModel.readAllEmails.observe(viewLifecycleOwner, { emails ->
-            for (i in emails)
-                listOfEmails.add(i)
-        })
         return when {
             email.isEmpty() -> {
                 textInputEmail.error = "Field can't be empty"
                 false
             }
-            email in listOfEmails -> {
+            emailList.contains(email) -> {
                 textInputEmail.error = "Email already registered to another account"
                 false
             }

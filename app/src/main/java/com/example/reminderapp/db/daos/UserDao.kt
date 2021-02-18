@@ -17,8 +17,11 @@ interface UserDao {
     fun readAllUsers(): LiveData<List<User>>
 
     @Query("SELECT email FROM user_table")
-    fun readAllEmails(): LiveData<List<String>>
+    fun readEmails(): LiveData<List<String>>
 
-    @Query("SELECT * FROM user_table WHERE username LIKE :name")
+    @Query("SELECT * FROM user_table WHERE username = :name")
     fun readUser(name: String): LiveData<User>
+
+    @Query("SELECT id FROM user_table WHERE username = :name")
+    fun readUserId(name: String): LiveData<Int>
 }

@@ -19,7 +19,9 @@
     <string name="pass_key">Password</string>
     <string name="email_key">Email</string>
     <string name="login_key">LoginStatus</string>
-    <string name="current_user_key">CurrentUserKey</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="current_user_key">CurrentUser</string>
+    <string name="current_user_id_key">CurrentUserId</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
+    <string name="delete">Delete</string>
 </resources>

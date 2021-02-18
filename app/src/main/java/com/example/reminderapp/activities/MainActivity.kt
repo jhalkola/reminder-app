@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
@@ -15,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ActivityMainBinding
 
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         // get shared preferences
         sharedPref = applicationContext.getSharedPreferences(
-            getString(R.string.sharedPref), Context.MODE_PRIVATE)
+                getString(R.string.sharedPref), Context.MODE_PRIVATE)
 
         checkLoginStatus()
 
@@ -44,6 +46,10 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         val bottomNavView = binding.bottomNavigationView
         NavigationUI.setupWithNavController(bottomNavView, navController)
+
+        // set toolbar to be used as support action bar
+        val toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
     }
 
     private fun checkLoginStatus() {
@@ -54,11 +60,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkLoginStatus()
-    }
-
+    /**
+     * unfocus EditText box when clicked outside of it
+     */
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         if (ev.action == MotionEvent.ACTION_DOWN) {
             val view = currentFocus
@@ -73,5 +77,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkLoginStatus()
     }
 }

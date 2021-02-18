@@ -6,7 +6,7 @@ import com.example.reminderapp.db.entities.User
 
 class UserRepository(private val userDao: UserDao) {
     val readAllUsers: LiveData<List<User>> = userDao.readAllUsers()
-    val readAllEmails: LiveData<List<String>> = userDao.readAllEmails()
+    val readEmails: LiveData<List<String>> = userDao.readEmails()
 
     suspend fun addUser(user: User) {
         userDao.addUser(user)
@@ -18,5 +18,9 @@ class UserRepository(private val userDao: UserDao) {
 
     fun readUser(name: String): LiveData<User> {
         return userDao.readUser(name)
+    }
+
+    fun readUserId(name: String): LiveData<Int> {
+        return userDao.readUserId(name)
     }
 }

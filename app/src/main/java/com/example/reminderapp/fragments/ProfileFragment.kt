@@ -5,10 +5,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NavUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -39,6 +39,7 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         binding.imageProfilePictureProfile.clipToOutline = true
 
+        // get shared preferences
         sharedPref = (activity as Context).applicationContext.getSharedPreferences(
                 getString(R.string.sharedPref), Context.MODE_PRIVATE)
         currentUser = sharedPref.getString(getString(R.string.current_user_key), null).toString()
@@ -48,8 +49,14 @@ class ProfileFragment : Fragment() {
         textInputEmail = binding.textFieldEmailProfile
         imageProfilePicture = binding.imageProfilePictureProfile
 
+        // set view model for accessing database
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         loadUserInfo()
+
+
+        val supActionBar = (activity as AppCompatActivity).supportActionBar!!
+        supActionBar.setDisplayHomeAsUpEnabled(false)
+        supActionBar.title = "Profile"
         return binding.root
     }
 

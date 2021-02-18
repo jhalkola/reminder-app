@@ -9,9 +9,11 @@ import android.os.Bundle
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -35,6 +37,7 @@ class ProfileEditFragment : Fragment() {
     private lateinit var currentUser: String
     private lateinit var mUserViewModel: UserViewModel
     private lateinit var imageUri: Uri
+    private lateinit var emailList: List<String>
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -53,8 +56,18 @@ class ProfileEditFragment : Fragment() {
         imageProfilePicture = binding.imageProfilePictureProfile
 
         mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        // get all emails from db. Async task did not have enough time to complete in emailValidation
+        mUserViewModel.readEmails.observe(viewLifecycleOwner, { emails ->
+            emailList = emails
+        })
 
         loadUserInfo()
+
+        setHasOptionsMenu(true)
+        val supActionBar = (activity as AppCompatActivity).supportActionBar!!
+        supActionBar.setDisplayHomeAsUpEnabled(true)
+        supActionBar.title = "Edit Profile"
+
         return binding.root
     }
 
@@ -69,9 +82,13 @@ class ProfileEditFragment : Fragment() {
         }
     }
 
-    /**
-     * Load user's info to the profile page
-     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == android.R.id.home) {
+            findNavController().navigate(R.id.action_profileEditFragment_to_profileFragment)
+            true
+        } else { super.onOptionsItemSelected(item) }
+    }
+
     private fun loadUserInfo() {
         val savedPassword = sharedPref.getString(currentUser.plus(R.string.pass_key), null)
         textInputPassword.editText?.setText(savedPassword)
@@ -128,7 +145,7 @@ class ProfileEditFragment : Fragment() {
      * is not already in use
      */
     private fun validateFields(): Boolean {
-        return !(!validateUsername() or !validatePassword() or !validateEmail())
+        return !(!validateEmail() or!validateUsername() or !validatePassword())
     }
 
     private fun validateUsername(): Boolean {
@@ -173,17 +190,13 @@ class ProfileEditFragment : Fragment() {
 
     private fun validateEmail(): Boolean {
         val email = textInputEmail.editText?.text.toString()
-        val listOfEmails: MutableList<String> = mutableListOf()
-        mUserViewModel.readAllEmails.observe(viewLifecycleOwner, { emails ->
-            for (i in emails)
-                listOfEmails.add(i)
-        })
+        println(emailList)
         return when {
             email.isEmpty() -> {
                 textInputEmail.error = "Field can't be empty"
                 false
             }
-            (email in listOfEmails) and (email != args.currentUserInfo.email) -> {
+            emailList.contains(email) and (email != args.currentUserInfo.email) -> {
                 textInputEmail.error = "Email already registered to another account"
                 false
             }
