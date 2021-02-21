@@ -82,6 +82,6 @@ class AddReminderFragment : Fragment() {
     }
 
     private fun inputCheck(header: String, body: String): Boolean {
-        return !(TextUtils.isEmpty(header) || TextUtils.isEmpty(body))
+        return !(TextUtils.isEmpty(header) && TextUtils.isEmpty(body))
     }
 }

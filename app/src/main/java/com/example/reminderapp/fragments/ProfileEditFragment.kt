@@ -76,7 +76,7 @@ class ProfileEditFragment : Fragment() {
             pickImage()
         }
         binding.buttonSaveChanges.setOnClickListener {
-            if (updateUserInformation()) {
+            if (updateUser()) {
                 findNavController().navigate(R.id.action_profileEditFragment_to_profileFragment)
             }
         }
@@ -107,7 +107,7 @@ class ProfileEditFragment : Fragment() {
      * Save login info to shared preferences and user info to the database
      * Information saved: id (PK), username, email, profile picture Uri as string
      */
-    private fun updateUserInformation(): Boolean {
+    private fun updateUser(): Boolean {
         val username = textInputUsername.editText?.text.toString()
         val password = textInputPassword.editText?.text.toString()
         val email = textInputEmail.editText?.text.toString()
