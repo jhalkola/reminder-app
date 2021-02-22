@@ -5,11 +5,11 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@color/black"
     tools:context=".fragments.AddReminderFragment" >
 
     <EditText
-        android:id="@+id/textHeader"
+        android:id="@+id/textMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -18,29 +18,24 @@
         android:backgroundTint="@color/light_grey"
         android:ems="10"
         android:hint="@string/title"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
         android:textColorHint="@color/light_grey"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:autofillHints="@string/title" />
 
-    <EditText
-        android:id="@+id/textBody"
+    <ImageView
+        android:id="@+id/imageReminder"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@null"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="@string/content"
-        android:inputType="textMultiLine"
-        android:textColorHint="@color/light_grey"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textHeader"
-        app:layout_constraintStart_toStartOf="@+id/textHeader"
-        app:layout_constraintTop_toBottomOf="@+id/textHeader"
-        android:autofillHints="@string/title" />
+        app:layout_constraintEnd_toEndOf="@+id/textMessage"
+        app:layout_constraintStart_toStartOf="@+id/textMessage"
+        app:layout_constraintTop_toBottomOf="@+id/textMessage"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_add_photo"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NavUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController

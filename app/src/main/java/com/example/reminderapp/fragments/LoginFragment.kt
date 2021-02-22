@@ -3,7 +3,6 @@ package com.example.reminderapp.fragments
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,10 +11,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.example.reminderapp.activities.MainActivity
 import com.example.reminderapp.R
-import com.example.reminderapp.activities.LoginActivity
 import com.example.reminderapp.databinding.FragmentLoginBinding
 import com.example.reminderapp.db.viewmodels.UserViewModel
 import com.google.android.material.textfield.TextInputLayout

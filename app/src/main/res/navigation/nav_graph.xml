@@ -12,10 +12,18 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_addReminderFragment"
-            app:destination="@id/addReminderFragment" />
+            app:destination="@id/addReminderFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_homeFragment_to_editReminderFragment"
-            app:destination="@id/editReminderFragment" />
+            app:destination="@id/editReminderFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -24,7 +32,11 @@
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_profileFragment_to_profileEditFragment"
-            app:destination="@id/profileEditFragment" />
+            app:destination="@id/profileEditFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/profileEditFragment"
@@ -32,7 +44,11 @@
         android:label="ProfileEditFragment" >
         <action
             android:id="@+id/action_profileEditFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <argument
             android:name="currentUserInfo"
             app:argType="com.example.reminderapp.db.entities.User" />
@@ -44,7 +60,11 @@
         tools:layout="@layout/fragment_reminder" >
         <action
             android:id="@+id/action_addReminderFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/editReminderFragment"
@@ -52,7 +72,11 @@
         android:label="EditReminderFragment" >
         <action
             android:id="@+id/action_editReminderFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
         <argument
             android:name="currentReminder"
             app:argType="com.example.reminderapp.db.entities.Reminder" />

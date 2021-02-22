@@ -13,6 +13,9 @@ interface ReminderDao {
     @Update
     suspend fun updateReminder(reminder: Reminder)
 
+    @Delete
+    suspend fun deleteReminder(reminder: Reminder)
+
     @Query("SELECT * FROM reminder_table ORDER BY id ASC")
     fun readAllReminders(): LiveData<List<Reminder>>
 }

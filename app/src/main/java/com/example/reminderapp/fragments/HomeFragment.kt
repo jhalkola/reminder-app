@@ -1,6 +1,5 @@
 package com.example.reminderapp.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -19,6 +18,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var listView: ListView
     private lateinit var mReminderViewModel: ReminderViewModel
+    private lateinit var adapter: ReminderAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,13 +27,12 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         // set toolbar options
-        setHasOptionsMenu(true)
         val supActionBar = (activity as AppCompatActivity).supportActionBar!!
         supActionBar.setDisplayHomeAsUpEnabled(false)
         supActionBar.title = "Reminders"
 
         // ListView
-        val adapter = ReminderAdapter(activity as Context)
+        adapter = ReminderAdapter(requireContext())
         listView = binding.listViewMain
         listView.adapter = adapter
 
@@ -49,11 +48,6 @@ class HomeFragment : Fragment() {
         binding.buttonAddReminder.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addReminderFragment)
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_toolbar_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onDestroyView() {

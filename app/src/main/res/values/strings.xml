@@ -21,7 +21,7 @@
     <string name="login_key">LoginStatus</string>
     <string name="current_user_key">CurrentUser</string>
     <string name="current_user_id_key">CurrentUserId</string>
-    <string name="title">Title</string>
+    <string name="title">Reminder message</string>
     <string name="content">Content</string>
     <string name="delete">Delete</string>
 </resources>

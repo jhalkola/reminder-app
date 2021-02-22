@@ -10,8 +10,8 @@ import kotlinx.parcelize.Parcelize
 data class Reminder(
         @PrimaryKey(autoGenerate = true)
         val id: Int,
-        val header: String,
-        val body: String,
+        val message: String,
+        val imageUri: String,
         val location_x: Double,
         val location_y: Double,
         val reminder_time: String,

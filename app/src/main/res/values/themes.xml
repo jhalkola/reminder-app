@@ -2,21 +2,21 @@
     <!-- Base application theme. -->
     <style name="Theme.ReminderApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:statusBarColor">@color/app_background</item>
+        <item name="android:statusBarColor">@color/black</item>
     </style>
 
     <style name="LoginBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:textColorHint">@color/login_hint</item>
         <item name="boxStrokeColor">@color/white</item>
         <item name="hintTextColor">@color/white</item>
-        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidth">1.5dp</item>
     </style>
 
     <style name="BoxStyle">
         <item name="android:textColorHint">@color/light_grey</item>
         <item name="boxStrokeColor">@color/box_focus</item>
         <item name="hintTextColor">@color/box_focus</item>
-        <item name="boxBackgroundColor">@color/app_background</item>
+        <item name="boxBackgroundColor">@color/black</item>
     </style>
 
     <style name="HintStyle">

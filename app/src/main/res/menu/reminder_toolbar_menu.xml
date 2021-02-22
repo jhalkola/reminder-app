@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/confirmReminder"
@@ -10,10 +11,16 @@
         android:id="@+id/setNotificationReminder"
         android:icon="@drawable/ic_notification"
         android:title=""
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/addImage"
+        android:icon="@drawable/ic_add_photo"
+        android:title=""
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/deleteReminder"
         android:icon="@drawable/ic_delete"
-        android:title=""
+        android:title="@string/delete"
         app:showAsAction="ifRoom" />
 </menu>
