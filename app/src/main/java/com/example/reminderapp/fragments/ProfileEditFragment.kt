@@ -94,7 +94,7 @@ class ProfileEditFragment : Fragment() {
         textInputPassword.editText?.setText(savedPassword)
         textInputUsername.editText?.setText(args.currentUserInfo.username)
         textInputEmail.editText?.setText(args.currentUserInfo.email)
-        val imageUriString = args.currentUserInfo.profileImageUri
+        val imageUriString = args.currentUserInfo.imageUri
         imageUri = Uri.parse(imageUriString)
         if (imageUriString.isNotEmpty()) {
             Glide.with(this)

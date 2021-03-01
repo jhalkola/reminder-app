@@ -78,7 +78,7 @@ class ProfileFragment : Fragment() {
         mUserViewModel.readUser(currentUser).observe(viewLifecycleOwner, { user ->
             textInputUsername.editText?.setText(user.username)
             textInputEmail.editText?.setText(user.email)
-            val imageUri = Uri.parse(user.profileImageUri)
+            val imageUri = Uri.parse(user.imageUri)
             if (imageUri.toString().isNotEmpty()) {
                 Glide.with(this)
                         .load(imageUri)

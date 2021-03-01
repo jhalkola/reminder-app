@@ -71,10 +71,10 @@ class ReminderAdapter(context: Context): BaseAdapter() {
     private fun formatDate(date: String): String {
         val dt = LocalDateTime.parse(date)
         val year = dt.year
-        val month = dt.month.toString().toLowerCase(Locale.ROOT)
+        val month = dt.month.toString().toLowerCase(Locale.ROOT).capitalize(Locale.ROOT)
         val day = dt.dayOfMonth
         val hour = dt.hour
         val minute = dt.minute
-        return "$day.$month $year at $hour.$minute"
+        return "$day. $month $year at $hour.$minute"
     }
 }

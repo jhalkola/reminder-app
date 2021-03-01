@@ -1,21 +1,31 @@
 package com.example.reminderapp.activities
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Rect
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.reminderapp.R
+import com.example.reminderapp.ReminderWorker
 import com.example.reminderapp.databinding.ActivityMainBinding
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -79,5 +89,58 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         checkLoginStatus()
+    }
+
+    companion object {
+        fun showNotification(context: Context, message: String, notificationID: Int) {
+            val channelID= "reminder_app_channel_id"
+            val channelName = "Reminder App"
+
+            val notificationBuilder = NotificationCompat.Builder(context, channelID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(channelName)
+                .setContentText(message)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setGroup(channelID)
+
+            val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(channelID, channelName,
+                    NotificationManager.IMPORTANCE_DEFAULT).apply {
+
+                }
+                manager.createNotificationChannel(channel)
+            }
+            manager.notify(notificationID, notificationBuilder.build())
+        }
+
+        fun scheduleNotification(context: Context, uid: Int, tag: String,
+                                 timeInMillis: Long, message: String) {
+            val workManager = WorkManager.getInstance(context)
+            val reminderParameters = Data.Builder()
+                .putString("message", message)
+                .putInt("uid", uid)
+                .build()
+
+            // get minutes from now until reminder
+            var minutesFromNow = 0L
+            if (timeInMillis > System.currentTimeMillis())
+                minutesFromNow = timeInMillis - System.currentTimeMillis()
+
+            val notificationWork = OneTimeWorkRequest.Builder(ReminderWorker::class.java)
+                    .setInputData(reminderParameters)
+                    .setInitialDelay(minutesFromNow, TimeUnit.MILLISECONDS)
+                    .addTag(tag)
+                    .build()
+            workManager.enqueue(notificationWork)
+        }
+
+        fun cancelNotification(context: Context, tag: String) {
+            val workManager = WorkManager.getInstance(context)
+            // use tag to delete queued work
+            workManager.cancelAllWorkByTag(tag)
+        }
     }
 }
