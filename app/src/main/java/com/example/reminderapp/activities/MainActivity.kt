@@ -1,7 +1,6 @@
 package com.example.reminderapp.activities
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -15,22 +14,26 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
+import androidx.work.*
 import com.example.reminderapp.R
 import com.example.reminderapp.ReminderWorker
 import com.example.reminderapp.databinding.ActivityMainBinding
-import java.util.*
+import com.example.reminderapp.db.entities.Reminder
+import com.example.reminderapp.db.viewmodels.ReminderViewModel
+import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var mReminderViewModel: ReminderViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,13 +99,27 @@ class MainActivity : AppCompatActivity() {
             val channelID= "reminder_app_channel_id"
             val channelName = "Reminder App"
 
+            val bundle = Bundle().apply {
+                putInt("id", notificationID)
+            }
+
+            val pendingIntent = NavDeepLinkBuilder(context)
+                    .setComponentName(MainActivity::class.java)
+                    .setGraph(R.navigation.nav_graph)
+                    .setDestination(R.id.homeFragment)
+                    .setArguments(bundle)
+                    .createPendingIntent()
+
             val notificationBuilder = NotificationCompat.Builder(context, channelID)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(channelName)
-                .setContentText(message)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(message))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setGroup(channelID)
+                    .setOnlyAlertOnce(true)
+                    .setAutoCancel(true)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentTitle("Reminder")
+                    .setContentText(message)
+                    .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(pendingIntent)
+                    .setGroup(channelID)
 
             val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -120,9 +137,9 @@ class MainActivity : AppCompatActivity() {
                                  timeInMillis: Long, message: String) {
             val workManager = WorkManager.getInstance(context)
             val reminderParameters = Data.Builder()
-                .putString("message", message)
-                .putInt("uid", uid)
-                .build()
+                    .putString("message", message)
+                    .putInt("uid", uid)
+                    .build()
 
             // get minutes from now until reminder
             var minutesFromNow = 0L
@@ -134,13 +151,19 @@ class MainActivity : AppCompatActivity() {
                     .setInitialDelay(minutesFromNow, TimeUnit.MILLISECONDS)
                     .addTag(tag)
                     .build()
-            workManager.enqueue(notificationWork)
+            workManager.enqueueUniqueWork(tag, ExistingWorkPolicy.REPLACE, notificationWork)
         }
 
         fun cancelNotification(context: Context, tag: String) {
             val workManager = WorkManager.getInstance(context)
             // use tag to delete queued work
             workManager.cancelAllWorkByTag(tag)
+            workManager.getWorkInfosByTagLiveData(tag)
+        }
+
+        fun workStatus(context: Context, tag: String): ListenableFuture<MutableList<WorkInfo>> {
+            val workManager = WorkManager.getInstance(context)
+            return workManager.getWorkInfosForUniqueWork(tag)
         }
     }
 }

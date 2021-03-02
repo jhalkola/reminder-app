@@ -32,4 +32,26 @@
         app:layout_constraintStart_toStartOf="@+id/textMessage"
         app:layout_constraintTop_toBottomOf="@+id/textMessage"
         tools:text="TextView" />
+
+    <TextView
+        android:id="@+id/textReminderTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/light_grey"
+        android:textSize="13sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textReminderCreated"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="TextView" />
+
+    <ImageView
+        android:id="@+id/imageNotiIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/textReminderTime"
+        app:layout_constraintEnd_toStartOf="@+id/textReminderTime"
+        app:layout_constraintTop_toTopOf="@+id/textReminderTime"
+        app:srcCompat="@drawable/ic_notification"
+        tools:ignore="ContentDescription"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

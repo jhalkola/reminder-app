@@ -141,7 +141,6 @@ class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Time
                     tag,
                     reminderSeen
             )
-            println(reminder.id)
             mReminderViewModel.addReminder(reminder)
             true
         } else {

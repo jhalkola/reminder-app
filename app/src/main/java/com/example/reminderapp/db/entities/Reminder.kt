@@ -11,13 +11,13 @@ import java.util.*
 @Entity(tableName = "reminder_table")
 data class Reminder(
         @PrimaryKey(autoGenerate = true) val id: Int,
-        @ColumnInfo(name = "message") val message: String,
-        @ColumnInfo(name = "image_uri") val imageUri: String,
-        @ColumnInfo(name = "location_x") val location_x: Double,
-        @ColumnInfo(name = "location_y") val location_y: Double,
-        @ColumnInfo(name = "reminder_time") val reminder_time: String,
+        @ColumnInfo(name = "message") var message: String,
+        @ColumnInfo(name = "image_uri") var imageUri: String,
+        @ColumnInfo(name = "location_x") var location_x: Double,
+        @ColumnInfo(name = "location_y") var location_y: Double,
+        @ColumnInfo(name = "reminder_time") var reminder_time: String,
         @ColumnInfo(name = "creation_time") val creation_time: String,
         @ColumnInfo(name = "creator_id") val creator_id: Int,
         @ColumnInfo(name = "request_tag") val request_tag: String,
-        @ColumnInfo(name = "reminder_seen") val reminder_seen: Boolean
+        @ColumnInfo(name = "reminder_seen") var reminder_seen: Boolean
 ): Parcelable

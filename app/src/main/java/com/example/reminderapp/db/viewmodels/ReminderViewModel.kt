@@ -4,10 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.example.reminderapp.activities.MainActivity
+import com.example.reminderapp.adapters.ReminderAdapter
 import com.example.reminderapp.db.AppDatabase
 import com.example.reminderapp.db.entities.Reminder
 import com.example.reminderapp.db.entities.User
 import com.example.reminderapp.db.repositories.ReminderRepository
+import com.example.reminderapp.fragments.HomeFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

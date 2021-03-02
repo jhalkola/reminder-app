@@ -108,8 +108,11 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
 
     private fun loadReminderData() {
         imageUri = Uri.parse(args.currentReminder.imageUri)
+        println(imageUri)
         reminderTime = args.currentReminder.reminder_time
-        binding.imageReminder.setImageURI(imageUri)
+        Glide.with(this)
+                .load(imageUri)
+                .into(binding.imageReminder)
         binding.textMessage.setText(args.currentReminder.message)
         if (reminderTime.isNotEmpty()) {
             binding.textNotificationTime.toggleVisibility()
@@ -146,29 +149,28 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
         val message = binding.textMessage.text.toString()
         val image = imageUri.toString()
         val tag = args.currentReminder.request_tag
+        val reminderSeen = args.currentReminder.reminder_seen
+        val oldReminderTime = args.currentReminder.reminder_time
+        val oldMessage = args.currentReminder.message
 
         return if (message.isNotEmpty()) {
+            val reminder = args.currentReminder
+            reminder.message = message
+            reminder.imageUri = image
+            /*reminder.location_x = location_x
+            reminder.location_x = location_y*/
+            reminder.reminder_time = reminderTime
+
+            mReminderViewModel.updateReminder(reminder)
             if (reminderTime.isEmpty() and (args.currentReminder.reminder_time != reminderTime)) {
                 MainActivity.cancelNotification(activity as Context, tag)
-            } else if ( (args.currentReminder.reminder_time != reminderTime) or
-                    (args.currentReminder.message != message) ) {
-                val millis = getReminderInMillis()
-                MainActivity.cancelNotification(activity as Context, tag)
-                MainActivity.scheduleNotification(activity as Context, args.currentReminder.creator_id, tag, millis, message)
+            } else if (!reminderSeen and reminderTime.isNotEmpty()) {
+                if ((oldReminderTime != reminderTime) or (oldMessage != message)) {
+                    val millis = getReminderInMillis()
+                    MainActivity.cancelNotification(activity as Context, tag)
+                    MainActivity.scheduleNotification(activity as Context, args.currentReminder.creator_id, tag, millis, message)
+                }
             }
-            val reminder = Reminder(
-                    args.currentReminder.id,
-                    message,
-                    image,
-                    args.currentReminder.location_x,
-                    args.currentReminder.location_y,
-                    reminderTime,
-                    args.currentReminder.creation_time,
-                    args.currentReminder.creator_id,
-                    tag,
-                    args.currentReminder.reminder_seen
-            )
-            mReminderViewModel.updateReminder(reminder)
             true
         } else {
             Toast.makeText(activity as Context, "Message field cannot be empty. Reminder was not changed", Toast.LENGTH_SHORT).show()
