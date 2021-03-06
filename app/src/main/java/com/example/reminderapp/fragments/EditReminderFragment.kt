@@ -9,6 +9,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.widget.DatePicker
 import android.widget.TimePicker
@@ -37,8 +38,7 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
     private val args by navArgs<EditReminderFragmentArgs>()
     private val pickImage = 1
     private lateinit var mReminderViewModel: ReminderViewModel
-    private lateinit var imageUri: Uri
-    private lateinit var reminderTime: String
+    private lateinit var reminder: Reminder
     private var day = 0
     private var month = 0
     private var year = 0
@@ -61,6 +61,7 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
         supActionBar.setDisplayHomeAsUpEnabled(true)
         supActionBar.title = ""
 
+        reminder = args.currentReminder
         loadReminderData()
 
         return binding.root
@@ -92,7 +93,7 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
             true
         }
         R.id.setNotificationReminder -> {
-            pickNotificationTime()
+            chooseTimeOrLocation()
             true
         }
         R.id.addImage -> {
@@ -107,13 +108,12 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
     }
 
     private fun loadReminderData() {
-        imageUri = Uri.parse(args.currentReminder.imageUri)
-        println(imageUri)
-        reminderTime = args.currentReminder.reminder_time
+        val uri = Uri.parse(reminder.imageUri)
+        val reminderTime = reminder.reminder_time
         Glide.with(this)
-                .load(imageUri)
+                .load(uri)
                 .into(binding.imageReminder)
-        binding.textMessage.setText(args.currentReminder.message)
+        binding.textMessage.setText(reminder.message)
         if (reminderTime.isNotEmpty()) {
             binding.textNotificationTime.toggleVisibility()
             binding.textNotificationTime.text = formatDate(reminderTime)
@@ -123,8 +123,9 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
     private fun deleteImage() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes") {_, _ ->
-            imageUri = Uri.parse("")
-            binding.imageReminder.setImageURI(imageUri)
+            val uri = Uri.parse("")
+            reminder.imageUri = ""
+            binding.imageReminder.setImageURI(uri)
         }
         builder.setNegativeButton("No") {_, _ -> }
         builder.setTitle("Remove image?")
@@ -147,22 +148,17 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
 
     private fun updateReminder(): Boolean {
         val message = binding.textMessage.text.toString()
-        val image = imageUri.toString()
-        val tag = args.currentReminder.request_tag
-        val reminderSeen = args.currentReminder.reminder_seen
+        val tag = reminder.request_tag
+        val reminderSeen = reminder.reminder_seen
+        val reminderTime = reminder.reminder_time
         val oldReminderTime = args.currentReminder.reminder_time
         val oldMessage = args.currentReminder.message
 
         return if (message.isNotEmpty()) {
-            val reminder = args.currentReminder
             reminder.message = message
-            reminder.imageUri = image
-            /*reminder.location_x = location_x
-            reminder.location_x = location_y*/
-            reminder.reminder_time = reminderTime
-
             mReminderViewModel.updateReminder(reminder)
-            if (reminderTime.isEmpty() and (args.currentReminder.reminder_time != reminderTime)) {
+
+            if (reminderTime.isEmpty() and (oldReminderTime != reminderTime)) {
                 MainActivity.cancelNotification(activity as Context, tag)
             } else if (!reminderSeen and reminderTime.isNotEmpty()) {
                 if ((oldReminderTime != reminderTime) or (oldMessage != message)) {
@@ -180,11 +176,26 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
 
     private fun getReminderInMillis(): Long {
         val formatter = DateTimeFormatter.ofPattern("d.M.yyyy H.m")
-        val date = LocalDateTime.parse(reminderTime, formatter)
+        val date = LocalDateTime.parse(reminder.reminder_time, formatter)
         // add timezone to the reminderTime
         val timeZoneDateTime = date.atZone(ZoneId.of("EET"))
         // return reminderTime in milliseconds
         return timeZoneDateTime.toInstant().toEpochMilli()
+    }
+
+    private fun chooseTimeOrLocation() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("Location") {_, _ ->
+            val action = EditReminderFragmentDirections.actionEditReminderFragmentToMapsFragment(reminder, "editFragment")
+            findNavController().navigate(action)
+        }
+        builder.setNegativeButton("Time") {_, _ ->
+            pickNotificationTime()
+        }
+        builder.setNeutralButton("Cancel") {_, _ -> }
+        builder.setTitle("Choose location or time")
+        builder.setMessage("Do you want to choose reminder location or time and date?")
+        builder.create().show()
     }
 
     /**
@@ -203,9 +214,10 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == pickImage && resultCode == Activity.RESULT_OK && data != null) {
-            imageUri = data.data!!
+            val uri = data.data!!
+            reminder.imageUri = uri.toString()
             Glide.with(this)
-                    .load(imageUri)
+                    .load(uri)
                     .into(binding.imageReminder)
         }
     }
@@ -216,7 +228,7 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
             pickNotificationTime()
         }
         builder.setNegativeButton("Delete") {_, _ ->
-            reminderTime = ""
+            reminder.reminder_time = ""
             binding.textNotificationTime.text = ""
             binding.textNotificationTime.toggleVisibility()
         }
@@ -276,7 +288,8 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
         savedMinute = minute
         savedHour = hourOfDay
 
-        reminderTime = "$savedDay.$savedMonth.$savedYear $savedHour.$savedMinute"
+        val reminderTime = "$savedDay.$savedMonth.$savedYear $savedHour.$savedMinute"
+        reminder.reminder_time = reminderTime
         binding.textNotificationTime.isVisible = true
         binding.textNotificationTime.text = formatDate(reminderTime)
     }

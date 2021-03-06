@@ -86,7 +86,20 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.buttonAddReminder.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_addReminderFragment)
+            // create empty reminder
+            val reminder = Reminder(0,
+                    "",
+                    "",
+                    null,
+                    null,
+                    "",
+                    "",
+                    0,
+                    "",
+                    false
+            )
+            val action = HomeFragmentDirections.actionHomeFragmentToAddReminderFragment(reminder)
+            findNavController().navigate(action)
         }
     }
 
