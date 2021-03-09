@@ -5,5 +5,5 @@
         android:id="@+id/showAllReminder"
         android:icon="@drawable/ic_invisible"
         android:title=""
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

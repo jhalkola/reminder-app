@@ -1,6 +1,7 @@
 package com.example.reminderapp.fragments
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -120,8 +121,8 @@ class RegisterFragment : Fragment() {
         if (requestCode == pickImage && resultCode == Activity.RESULT_OK && data != null) {
             imageUri = data.data!!
             Glide.with(this)
-                .load(imageUri)
-                .into(binding.imageProfilePictureRegister)
+                    .load(imageUri)
+                    .into(binding.imageProfilePictureRegister)
         }
     }
 

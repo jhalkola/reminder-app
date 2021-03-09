@@ -18,4 +18,7 @@ interface ReminderDao {
 
     @Query("SELECT * FROM reminder_table ORDER BY id ASC")
     fun readAllReminders(): LiveData<List<Reminder>>
+
+    @Query("SELECT * FROM reminder_table WHERE creator_id = :id")
+    fun readReminderByCreatorId(id: Int): LiveData<Reminder>
 }

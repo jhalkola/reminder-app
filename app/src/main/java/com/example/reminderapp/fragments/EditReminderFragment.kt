@@ -9,6 +9,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.*
 import android.widget.DatePicker
@@ -26,19 +27,25 @@ import com.example.reminderapp.activities.MainActivity
 import com.example.reminderapp.databinding.FragmentReminderBinding
 import com.example.reminderapp.db.entities.Reminder
 import com.example.reminderapp.db.viewmodels.ReminderViewModel
+import org.w3c.dom.Text
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener,
+        TimePickerDialog.OnTimeSetListener, TextToSpeech.OnInitListener {
     private var _binding: FragmentReminderBinding? = null
     private val binding get() = _binding!!
     private val args by navArgs<EditReminderFragmentArgs>()
     private val pickImage = 1
     private lateinit var mReminderViewModel: ReminderViewModel
     private lateinit var reminder: Reminder
+    private lateinit var oldReminderTime: String
+    private lateinit var oldMessage: String
+    private var tts: TextToSpeech? = null
+    private val finnish = Locale("fi", "FI")
     private var day = 0
     private var month = 0
     private var year = 0
@@ -64,6 +71,10 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
         reminder = args.currentReminder
         loadReminderData()
 
+        tts = TextToSpeech(requireContext(), this)
+        oldReminderTime = args.currentReminder.reminder_time
+        oldMessage = args.currentReminder.message
+
         return binding.root
     }
 
@@ -79,6 +90,16 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
         }
         binding.textNotificationTime.setOnClickListener {
             changeNotification()
+        }
+        binding.imageTts.setOnClickListener {
+            val message = binding.textMessage.text.toString()
+            if (message.isEmpty()) {
+                Toast.makeText(requireContext(), "Reminder does not have message",
+                        Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                speakOut(message)
+            }
         }
     }
 
@@ -111,8 +132,8 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
         val uri = Uri.parse(reminder.imageUri)
         val reminderTime = reminder.reminder_time
         Glide.with(this)
-                .load(uri)
-                .into(binding.imageReminder)
+            .load(uri)
+            .into(binding.imageReminder)
         binding.textMessage.setText(reminder.message)
         if (reminderTime.isNotEmpty()) {
             binding.textNotificationTime.toggleVisibility()
@@ -151,8 +172,6 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
         val tag = reminder.request_tag
         val reminderSeen = reminder.reminder_seen
         val reminderTime = reminder.reminder_time
-        val oldReminderTime = args.currentReminder.reminder_time
-        val oldMessage = args.currentReminder.message
 
         return if (message.isNotEmpty()) {
             reminder.message = message
@@ -164,7 +183,7 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
                 if ((oldReminderTime != reminderTime) or (oldMessage != message)) {
                     val millis = getReminderInMillis()
                     MainActivity.cancelNotification(activity as Context, tag)
-                    MainActivity.scheduleNotification(activity as Context, args.currentReminder.creator_id, tag, millis, message)
+                    MainActivity.scheduleNotification(activity as Context, reminder, millis)
                 }
             }
             true
@@ -292,5 +311,25 @@ class EditReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Tim
         reminder.reminder_time = reminderTime
         binding.textNotificationTime.isVisible = true
         binding.textNotificationTime.text = formatDate(reminderTime)
+    }
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = tts!!.setLanguage(finnish)
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Toast.makeText(requireContext(), "Language not supported by text to speech",
+                        Toast.LENGTH_SHORT
+                ).show()
+            }
+        } else {
+            Toast.makeText(requireContext(), "Error occurred",
+                    Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun speakOut(message: String) {
+        tts!!.speak(message, TextToSpeech.QUEUE_FLUSH, null, "")
     }
 }

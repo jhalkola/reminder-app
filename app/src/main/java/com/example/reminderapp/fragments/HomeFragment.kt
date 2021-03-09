@@ -1,7 +1,9 @@
 package com.example.reminderapp.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.ListView
@@ -45,11 +47,18 @@ class HomeFragment : Fragment() {
         adapter = ReminderAdapter()
         listView = binding.listViewMain
         listView.adapter = adapter
-        adapter.notifyDataSetChanged()
 
         val creatorID = arguments?.getInt("id")
         mReminderViewModel = ViewModelProvider(this).get(ReminderViewModel::class.java)
         mReminderViewModel.readAllReminders.observe(viewLifecycleOwner, { reminders ->
+            Log.d("tag", "in observer")
+            hiddenReminders.observe(viewLifecycleOwner, { hidden ->
+                if (hidden) {
+                    adapter.setData(reminderList as List<Reminder>)
+                } else {
+                    adapter.setData(reminders)
+                }
+            })
             if (creatorID != null) {
                 for (reminder in reminders) {
                     if (reminder.creator_id == creatorID) {
@@ -72,16 +81,13 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-            hiddenReminders.observe(viewLifecycleOwner, { hidden ->
-                if (hidden) {
-                    adapter.setData(reminderList as List<Reminder>)
-                } else {
-                    adapter.setData(reminders)
-                }
-            })
         })
 
         return binding.root
+    }
+
+    private fun searchReminders(reminders: List<Reminder>) {
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

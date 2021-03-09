@@ -3,6 +3,7 @@ package com.example.reminderapp.fragments
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
@@ -21,9 +22,7 @@ import com.example.reminderapp.R
 import com.example.reminderapp.activities.MainActivity
 import com.example.reminderapp.databinding.FragmentMapsBinding
 import com.example.reminderapp.db.entities.Reminder
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.GeofencingClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -83,7 +82,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
             }
-            Log.d("maps", "request permissions")
             requestPermissions(
                 permissions.toTypedArray(),
                 REQUEST_LOCATION_CODE
@@ -264,6 +262,27 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             locationMoved = true
         }
     }
+
+    /*private fun createGeofence(latlng: LatLng, creatorID: Int, geofencingClient: GeofencingClient) {
+        val geofence = Geofence.Builder()
+                .setRequestId(GEOFENCE_ID)
+                .setCircularRegion(latlng.latitude, latlng.longitude, GEOFENCE_RADIUS.toFloat())
+                .setExpirationDuration(GEOFENCE_EXPIRATION.toLong())
+                .setTransitionTypes(
+                        Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL
+                )
+                .setLoiteringDelay(GEOFENCE_DWELL_DELAY)
+                .build()
+
+        val geofenceRequest = GeofencingRequest.Builder()
+                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                .addGeofence(geofence)
+                .build()
+
+        val intent = Intent(activity as Context, GeofenceReceiver::class.java)
+                .putExtra("key", creatorID)
+
+    }*/
 
     companion object {
         private const val REQUEST_LOCATION_CODE = 1

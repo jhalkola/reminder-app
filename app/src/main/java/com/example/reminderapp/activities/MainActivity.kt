@@ -14,8 +14,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.fragment.NavHostFragment
@@ -25,15 +23,14 @@ import com.example.reminderapp.R
 import com.example.reminderapp.ReminderWorker
 import com.example.reminderapp.databinding.ActivityMainBinding
 import com.example.reminderapp.db.entities.Reminder
-import com.example.reminderapp.db.viewmodels.ReminderViewModel
 import com.google.common.util.concurrent.ListenableFuture
+import java.nio.channels.InterruptedByTimeoutException
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var sharedPref: SharedPreferences
-    private lateinit var mReminderViewModel: ReminderViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,8 +102,8 @@ class MainActivity : AppCompatActivity() {
 
             val pendingIntent = NavDeepLinkBuilder(context)
                     .setComponentName(MainActivity::class.java)
-                    .setGraph(R.navigation.nav_graph)
                     .setDestination(R.id.homeFragment)
+                    .setGraph(R.navigation.nav_graph)
                     .setArguments(bundle)
                     .createPendingIntent()
 
@@ -133,13 +130,28 @@ class MainActivity : AppCompatActivity() {
             manager.notify(notificationID, notificationBuilder.build())
         }
 
-        fun scheduleNotification(context: Context, uid: Int, tag: String,
-                                 timeInMillis: Long, message: String) {
+        fun scheduleNotification(context: Context, reminder: Reminder, timeInMillis: Long) {
+            val message = reminder.message
+            val notificationID = reminder.creator_id
+            val tag = reminder.request_tag
+            val lat = reminder.location_x
+            val lng = reminder.location_y
             val workManager = WorkManager.getInstance(context)
-            val reminderParameters = Data.Builder()
-                    .putString("message", message)
-                    .putInt("uid", uid)
-                    .build()
+
+            val reminderParameters: Data = if (lat != null && lng != null) {
+                Data.Builder()
+                        .putString("message", message)
+                        .putInt("notification_id", notificationID)
+                        .putDouble("lat", lat)
+                        .putDouble("lng", lng)
+                        .build()
+            } else {
+                Data.Builder()
+                        .putString("message", message)
+                        .putInt("notification_id", notificationID)
+                        .build()
+            }
+
 
             // get minutes from now until reminder
             var minutesFromNow = 0L

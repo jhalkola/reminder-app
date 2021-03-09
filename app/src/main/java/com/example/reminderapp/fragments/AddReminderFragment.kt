@@ -10,6 +10,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.*
 import android.widget.DatePicker
@@ -34,14 +35,17 @@ import java.util.*
 import kotlin.random.Random
 
 
-class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener,
+        TimePickerDialog.OnTimeSetListener, TextToSpeech.OnInitListener {
     private var _binding: FragmentReminderBinding? = null
     private val binding get() = _binding!!
     private val args by navArgs<AddReminderFragmentArgs>()
     private val pickImage = 1
+    private val finnish = Locale("fi", "FI")
     private lateinit var sharedPref: SharedPreferences
     private lateinit var mReminderViewModel: ReminderViewModel
     private lateinit var reminder: Reminder
+    private var tts: TextToSpeech? = null
     private var day = 0
     private var month = 0
     private var year = 0
@@ -58,7 +62,7 @@ class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Time
         _binding = FragmentReminderBinding.inflate(inflater, container, false)
 
         sharedPref = (activity as Context).applicationContext.getSharedPreferences(
-            getString(R.string.sharedPref), Context.MODE_PRIVATE)
+                getString(R.string.sharedPref), Context.MODE_PRIVATE)
 
         mReminderViewModel = ViewModelProvider(this).get(ReminderViewModel::class.java)
 
@@ -69,6 +73,8 @@ class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Time
 
         reminder = args.currentReminder
         loadReminderData()
+
+        tts = TextToSpeech(requireContext(), this)
 
         return binding.root
     }
@@ -81,6 +87,16 @@ class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Time
         binding.textNotificationTime.setOnClickListener {
             changeNotification()
         }
+        binding.imageTts.setOnClickListener {
+            val message = binding.textMessage.text.toString()
+            if (message.isEmpty()) {
+                Toast.makeText(requireContext(), "Reminder does not have message",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                speakOut(message)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -89,7 +105,7 @@ class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Time
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when(item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
             saveReminder()
             findNavController().navigate(R.id.action_addReminderFragment_to_homeFragment)
@@ -115,9 +131,11 @@ class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Time
     private fun loadReminderData() {
         val uri = Uri.parse(reminder.imageUri)
         val reminderTime = reminder.reminder_time
-        Glide.with(this)
+        if (uri.toString().isNotEmpty()) {
+            Glide.with(this)
                 .load(uri)
                 .into(binding.imageReminder)
+        }
         binding.textMessage.setText(reminder.message)
         if (reminderTime.isNotEmpty()) {
             binding.textNotificationTime.toggleVisibility()
@@ -141,20 +159,18 @@ class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Time
         val message = reminder.message
 
         return if (message.isNotEmpty()) {
+            // update creation time to match when save is done
+            reminder.creation_time = LocalDateTime.now().toString()
+            mReminderViewModel.addReminder(reminder)
             // schedule notification
             if (reminder.reminder_time.isNotEmpty()) {
                 val millis = getReminderInMillis()
                 MainActivity.scheduleNotification(
-                    activity as Context,
-                    reminder.creator_id,
-                    reminder.request_tag,
-                    millis,
-                    message
+                        activity as Context,
+                        reminder,
+                        millis,
                 )
             }
-            // update creation time to match when save is done
-            reminder.creation_time = LocalDateTime.now().toString()
-            mReminderViewModel.addReminder(reminder)
             Toast.makeText(activity,
                     "Reminder has been saved",
                     Toast.LENGTH_SHORT
@@ -177,12 +193,12 @@ class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Time
 
     private fun deleteImage() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Yes") {_, _ ->
+        builder.setPositiveButton("Yes") { _, _ ->
             val uri = Uri.parse("")
             reminder.imageUri = ""
             binding.imageReminder.setImageURI(uri)
         }
-        builder.setNegativeButton("No") {_, _ -> }
+        builder.setNegativeButton("No") { _, _ -> }
         builder.setTitle("Remove image?")
         builder.create().show()
     }
@@ -216,31 +232,31 @@ class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Time
      */
     private fun changeNotification() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Edit") {_, _ ->
+        builder.setPositiveButton("Edit") { _, _ ->
             pickNotificationTime()
         }
-        builder.setNegativeButton("Delete") {_, _ ->
+        builder.setNegativeButton("Delete") { _, _ ->
             val reminderTime = ""
             reminder.reminder_time = reminderTime
             binding.textNotificationTime.text = ""
             binding.textNotificationTime.toggleVisibility()
         }
-        builder.setNeutralButton("Cancel") {_, _ -> }
+        builder.setNeutralButton("Cancel") { _, _ -> }
         builder.setTitle("Change or delete notification of the reminder")
         builder.create().show()
     }
 
     private fun chooseTimeOrLocation() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Location") {_, _ ->
+        builder.setPositiveButton("Location") { _, _ ->
             getCurrentReminder()
             val action = AddReminderFragmentDirections.actionAddReminderFragmentToMapsFragment(reminder, "addFragment")
             findNavController().navigate(action)
         }
-        builder.setNegativeButton("Time") {_, _ ->
+        builder.setNegativeButton("Time") { _, _ ->
             pickNotificationTime()
         }
-        builder.setNeutralButton("Cancel") {_, _ -> }
+        builder.setNeutralButton("Cancel") { _, _ -> }
         builder.setTitle("Choose location or time")
         builder.setMessage("Do you want to choose reminder location or time and date?")
         builder.create().show()
@@ -297,5 +313,25 @@ class AddReminderFragment : Fragment(), DatePickerDialog.OnDateSetListener, Time
         reminder.reminder_time = reminderTime
         binding.textNotificationTime.isVisible = true
         binding.textNotificationTime.text = formatDate(reminderTime)
+    }
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = tts!!.setLanguage(finnish)
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Toast.makeText(requireContext(), "Language not supported by text to speech",
+                        Toast.LENGTH_SHORT
+                ).show()
+            }
+        } else {
+            Toast.makeText(requireContext(), "Error occurred",
+                    Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun speakOut(message: String) {
+        tts!!.speak(message, TextToSpeech.QUEUE_FLUSH, null, "")
     }
 }

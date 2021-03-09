@@ -19,4 +19,8 @@ class ReminderRepository(private val reminderDao: ReminderDao) {
     suspend fun deleteReminder(reminder: Reminder) {
         reminderDao.deleteReminder(reminder)
     }
+
+    fun readReminderByCreatorId(id: Int): LiveData<Reminder> {
+        return reminderDao.readReminderByCreatorId(id)
+    }
 }

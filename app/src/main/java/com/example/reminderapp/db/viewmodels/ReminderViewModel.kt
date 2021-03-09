@@ -41,4 +41,8 @@ class ReminderViewModel(application: Application): AndroidViewModel(application)
             repository.deleteReminder(reminder)
         }
     }
+
+    fun readReminderByCreatorId(id: Int): LiveData<Reminder> {
+        return repository.readReminderByCreatorId(id)
+    }
 }
